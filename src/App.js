@@ -1,14 +1,29 @@
 import { Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { onAuthStateChangedListener, createUserDocumentFromAuth } from './utils/firebase/firebase.utils';
 import Home from './routes/home/home.component'
 import Navigation from './routes/navigation/navigation.component';
 import Authentication from './routes/authentication/authentication.component';
 import Shop from './routes/shop/shop.component';
 import Checkout from './routes/checkout/checkout.component';
+import { setCurrentUser } from './store/user/user.action';
 
-// Make navigation component to be parent of the shop and home components that renders the categories
-// Index means it will render the component if it matches just the '/' path with nothing on it
-// Clicking on the shop link in the nav component will send you to the /shop route and render the shop component
+
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubsribe = onAuthStateChangedListener((user) => {
+        if(user) {
+            createUserDocumentFromAuth(user);
+        }
+        dispatch(setCurrentUser(user));
+    });
+
+    return unsubsribe;
+  }, [dispatch]);
+
   return (
     <Routes> 
       <Route path='/' element={ <Navigation/> }> 
