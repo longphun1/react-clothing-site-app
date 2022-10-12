@@ -1,6 +1,6 @@
 import './button.styles.scss';
 
-const BUTTON_TYPE_CLASS = { //change the styling of the button based on the type
+export const BUTTON_TYPE_CLASS = { //change the styling of the button based on the type
     google: 'google-sign-in',
     inverted: 'inverted'
 }
